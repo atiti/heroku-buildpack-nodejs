@@ -461,6 +461,12 @@ testMultiExport() {
   assertCapturedSuccess
 }
 
+testGrunt() {
+  compile "grunt"
+  assertCaptured "Found Gruntfile"
+  assertCapturedSuccess
+}
+
 # Utils
 
 pushd $(dirname 0) >/dev/null

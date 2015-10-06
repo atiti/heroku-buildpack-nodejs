@@ -154,5 +154,23 @@ summarize_build() {
   (npm ls --depth=0 | tail -n +2 || true) 2>/dev/null
 }
 
+build() {
+  # Check and run Grunt
+  if [ -f "$BUILD_DIR/grunt.js" ] || [ -f "$BUILD_DIR/Gruntfile.js" ] || [ -f "$BUILD_DIR/Gruntfile.coffee" ]; then
+    if [ -d "$ENV_DIR" ]; then
+      export_env_dir $ENV_DIR
+    fi
+
+    npm install grunt-cli
+    npm install grunt
+    npm install grunt-contrib-coffee
+    echo "Found Gruntfile, running grunt heroku:run task"
+    $BUILD_DIR/node_modules/.bin/grunt heroku:run
+  fi
+}
+
+header "Building"
+build | output "$LOG_FILE"
+
 header "Build succeeded!"
 summarize_build | output "$LOG_FILE"
